@@ -1,0 +1,13 @@
+email,course_name,records_date,status,rating
+alice@gmail.com,Java,2022-12-31,completed,5
+bob@gmail.com,HTML & CSS,2022-04-15,completed,4
+carol@gmail.com,Test automation,2023-04-07,completed,5
+charlie@gmail.com,C#,2023-04-13,completed,5
+evan@gmail.com,Performance testing,2023-04-13,completed,4
+george@gmail.com,Python,2024-03-12,completed,3
+anna@gmail.com,C#,2024-06-17,completed,5
+sofia@gmail.com,Java,2024-01-15,completed,4
+sam@gmail.com,"Backend (Node.js, Django, Ruby on Rails)",2024-11-29,completed,4
+richard@gmail.com,Java,2024-03-20,completed,5
+maria@gmail.com,Python,2025-02-20,in_progress,
+andrew@gmail.com,HTML & CSS,2025-04-25,enrolled,

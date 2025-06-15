@@ -1,0 +1,15 @@
+course_name,category_name,has_certificate,price
+JavaScript,Programming languages,true ,20
+Java,Programming languages,true ,25
+C#,Programming languages,true ,20
+C++,Programming languages,true ,15
+Python,Programming languages,true ,20
+HTML & CSS,Web development,false ,15
+"Frontend (React, Angular, Vue.js)",Web development,true ,40
+"Backend (Node.js, Django, Ruby on Rails)",Web development,true ,35
+Machine learning,Data Science and Analytics,true ,15
+"Data Analysis (Pandas, Excel)",Data Science and Analytics,false ,30
+"Data visualization (Tableau, Power BI)",Data Science and Analytics,false ,15
+Test automation,Software testing,true ,30
+Manual testing,Software testing,true ,20
+Performance testing,Software testing,false ,15

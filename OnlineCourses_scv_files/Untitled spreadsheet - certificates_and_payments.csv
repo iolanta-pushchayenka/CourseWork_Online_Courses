@@ -1,0 +1,13 @@
+email,course_name,issue_date,total_amount,payment_date
+alice@gmail.com,Java,2023-01-31,25,2022-12-31
+bob@gmail.com,HTML & CSS,2022-05-15,15,2022-04-15
+carol@gmail.com,Test automation,2023-05-07,30,2023-04-07
+charlie@gmail.com,C#,2023-05-13,20,2023-04-13
+evan@gmail.com,Performance testing,2023-05-13,15,2023-04-13
+george@gmail.com,Python,2024-04-12,20,2024-03-12
+anna@gmail.com,C#,2024-07-17,20,2024-06-17
+sofia@gmail.com,Java,2024-02-15,25,2024-01-15
+sam@gmail.com,"Backend (Node.js, Django, Ruby on Rails)",2024-12-29,35,2024-11-29
+richard@gmail.com,Java,2024-04-20,25,2024-03-20
+maria@gmail.com,Python,,20,2025-02-20
+andrew@gmail.com,HTML & CSS,,15,2025-04-25
