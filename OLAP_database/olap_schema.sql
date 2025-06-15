@@ -14,7 +14,7 @@ DROP TABLE IF EXISTS dwh_Dim_Time;
 
 
 
-
+----- создаем dim tables 
 CREATE TABLE IF NOT EXISTS dwh_Dim_Time (
     time_id SERIAL PRIMARY KEY,
     date DATE UNIQUE,
@@ -60,6 +60,8 @@ CREATE TABLE dwh_Dim_Instructor (
 
 
 
+
+---- создаем Bridge  таблицу
 CREATE TABLE dwh_Bridge_Instructor_Course (
     instructor_id INT REFERENCES dwh_Dim_Instructor(instructor_id),
     course_id INT REFERENCES dwh_Dim_Course(course_id),
@@ -68,6 +70,9 @@ CREATE TABLE dwh_Bridge_Instructor_Course (
 
 
 
+
+
+--- создаем Fact таблицы 
 CREATE TABLE dwh_Fact_Rating (
     user_sk INT REFERENCES dwh_Dim_User(user_sk),
     course_id INT REFERENCES dwh_Dim_Course(course_id),
@@ -76,8 +81,6 @@ CREATE TABLE dwh_Fact_Rating (
 );
 
 
-
- 
 CREATE TABLE dwh_Fact_Enrollment (
     user_sk INT REFERENCES dwh_Dim_User(user_sk),
     course_id INT REFERENCES dwh_Dim_Course(course_id),
@@ -123,16 +126,4 @@ JOIN dwh_Dim_Course dc
   ON dc.course_id = fr.course_id       
 GROUP BY dc.course_id, dc.course_name    
 ORDER BY avg_rating DESC;                
-
-
-
--- Месячные платежи
-SELECT * FROM dwh_Agg_Monthly_Payments ORDER BY year, month;
-
--- Средний рейтинг курса
-SELECT * FROM dwh_Agg_Course_Rating ORDER BY avg_rating DESC;
-
-
-
-
 

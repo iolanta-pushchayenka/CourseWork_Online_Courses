@@ -35,8 +35,6 @@ GROUP BY di.instructor_name
 ORDER BY total_revenue DESC;
 
 
-
-
 -----4) Платежеспособность пользователей по годам
 SELECT 
     du.name,
@@ -50,7 +48,4 @@ ORDER BY du.name, dt.year;
 
 
 
-
-
------- 
 

@@ -5,9 +5,6 @@ DROP EXTENSION IF EXISTS postgres_fdw CASCADE;
 
 CREATE EXTENSION IF NOT EXISTS postgres_fdw;
 
-
----- DROP SERVER oltp_server CASCADE;
-
 CREATE SERVER oltp_server
     FOREIGN DATA WRAPPER postgres_fdw
     OPTIONS (

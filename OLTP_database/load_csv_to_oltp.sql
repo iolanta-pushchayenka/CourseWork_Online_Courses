@@ -1,5 +1,4 @@
----1 создаем таблицу пользователей, дальше создаем временную таблицу юзеров через импорт вставляем в временную таблицу  данные и дальше из вр таблицы вставляем в обычную таблицу 
-
+---1 создаем временную таблицу для Users
 CREATE TABLE temp_users (
     name VARCHAR(100),
     email VARCHAR(100),
@@ -7,7 +6,7 @@ CREATE TABLE temp_users (
 );
 
 
----- 2 временная таблица Categories
+---- 2 создаем временную таблицу Categories и Course
 CREATE TABLE temp_categories_and_courses (
     course_name VARCHAR(100),
     category_name VARCHAR(100),
@@ -15,7 +14,7 @@ CREATE TABLE temp_categories_and_courses (
     price DECIMAL(10,2)
 );
 
----3 временная таблица
+---3 создаем временную таблицу Categories и Course
 CREATE TABLE temp_records_and_ratings (
     email VARCHAR(100),
     course_name VARCHAR(100),
@@ -27,7 +26,7 @@ CREATE TABLE temp_records_and_ratings (
 
 
 
------ 4 временная таблица
+----- 4 создаем временную таблицу Certificate и Payment
 CREATE TABLE temp_cert_pay (
     email VARCHAR(100),
     course_name VARCHAR(100),
@@ -38,7 +37,7 @@ CREATE TABLE temp_cert_pay (
 
 
 
------5 временная таблица
+-----5 создаем временную таблицу Instructors и Course_Instructors
 
 DROP TABLE IF EXISTS temp_instructors;
 
@@ -51,23 +50,21 @@ CREATE TABLE temp_instructors (
 
 
 
----1 
+---1 Загрузка данных из таблицы temp_users
 INSERT INTO Users (name, email, registration_date)
 SELECT name, email, registration_date
 FROM temp_users
 ON CONFLICT (email) DO NOTHING;
 
 
-select * from Users;
-
----2 вставка категорий из таблицы  temp_categories_and_courses 
+---2 Загрузка данных из таблицы temp_categories_and_courses 
 INSERT INTO Categories (category_name)
 SELECT DISTINCT category_name
 FROM temp_categories_and_courses
 ON CONFLICT (category_name) DO NOTHING;
 
 
----3 вставка курсов из таблицы  temp_categories_and_courses 
+---3 Загрузка данных из таблицы temp_categories_and_courses 
 INSERT INTO Course (course_name, category_id, has_certificate, price)
 SELECT 
     t.course_name,
@@ -78,12 +75,8 @@ FROM temp_categories_and_courses t
 JOIN Categories c ON c.category_name = t.category_name
 ON CONFLICT DO NOTHING;
 
-select * from  Course;
 
-
-
-
-----4 вставка записей на курс из временной таблицы 
+----4 Загрузка данных из таблицы temp_records_and_ratings
 INSERT INTO Records (user_id, course_id, records_date, status)
 SELECT 
     u.user_id,
@@ -96,10 +89,7 @@ JOIN Course c ON c.course_name = t.course_name
 ON CONFLICT DO NOTHING;
 
 
-
-select * from  Records;
-
----5 вставка рейтинга из временной таблицы 
+---5 Загрузка данных из таблицы temp_records_and_ratings 
 INSERT INTO Rating (user_id, course_id, rating)
 SELECT 
     u.user_id,
@@ -112,12 +102,7 @@ WHERE t.rating IS NOT NULL
 ON CONFLICT DO NOTHING;
 
 
-SELECT * FROM Records ORDER BY user_id;
-select * from  Rating ORDER BY user_id;
-
-
-
---- 6 вставка сертификатов 
+--- 6 Загрузка данных из таблицы temp_cert_pay
 INSERT INTO Certificate (user_id, course_id, issue_date)
 SELECT 
     u.user_id,
@@ -128,11 +113,8 @@ JOIN Users u ON u.email = t.email
 JOIN Course c ON c.course_name = t.course_name
 WHERE t.issue_date IS NOT NULL;
 
-select * from  Certificate;
 
-
-
-----7 вставка платежей 
+----7 Загрузка данных из таблицы temp_cert_pay
 INSERT INTO Payment (user_id, course_id, total_amount, payment_date)
 SELECT 
     u.user_id,
@@ -144,21 +126,14 @@ JOIN Users u ON u.email = t.email
 JOIN Course c ON c.course_name = t.course_name;
 
 
-
-
-SELECT * FROM Certificate  ORDER BY certificate_id;
-select * from  Payment ORDER BY user_id;
-
-
-
-  
------8 
+-----8 Загрузка данных из таблицы temp_instructors
 INSERT INTO Instructors (instructor_name)
 SELECT DISTINCT instructor_name
 FROM temp_instructors
 ON CONFLICT (instructor_name) DO NOTHING;
 
------9 
+
+-----9 Загрузка данных из таблицы temp_instructors
 INSERT INTO Course_Instructors (course_id, instructor_id)
 SELECT
     c.course_id,
@@ -168,14 +143,4 @@ JOIN Course c ON c.course_name = t.course_name
 JOIN Instructors i ON i.instructor_name = t.instructor_name
 order by instructor_id
 ON CONFLICT DO NOTHING;
-
-
-
-
-select * from  temp_instructors;
-select * from course ;
-select * from  Instructors;
-select * from  course_instructors;
-
- 
 

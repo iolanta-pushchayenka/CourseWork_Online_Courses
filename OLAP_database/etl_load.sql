@@ -1,5 +1,4 @@
-----------------------------------------------------------------------------------------
-
+---- загрузка данных в dim tables 
 INSERT INTO dwh_Dim_Time (date, day, month, quarter, year)
 SELECT DISTINCT 
     payment_date,
@@ -11,7 +10,6 @@ FROM payment
 WHERE payment_date IS NOT NULL
   AND payment_date NOT IN (SELECT date FROM dwh_Dim_Time);
 
------------------------------------------------------2
 
 INSERT INTO dwh_Dim_Category (category_name)
 SELECT DISTINCT category_name
@@ -20,7 +18,7 @@ WHERE category_name NOT IN (
     SELECT category_name FROM dwh_Dim_Category
 );
 
-------------------------------------------------------------3
+
 
 INSERT INTO dwh_Dim_Course (course_name, category_id, has_certificate)
 SELECT c.course_name, dc.category_id, c.has_certificate
@@ -31,7 +29,6 @@ WHERE c.course_name NOT IN (
     SELECT course_name FROM dwh_Dim_Course
 );
 
-------------------------------------------------------------------4
 
 WITH source_data AS (
   SELECT * FROM users
@@ -54,7 +51,6 @@ INSERT INTO dwh_Dim_User (user_id, name, email, registration_date, start_date, e
 SELECT user_id, name, email, registration_date, CURRENT_DATE, NULL, true
 FROM changed_data;
 
---------------------------------------------5
 
 INSERT INTO dwh_Dim_Instructor (instructor_name)
 SELECT DISTINCT instructor_name
@@ -63,8 +59,8 @@ WHERE instructor_name NOT IN (
     SELECT instructor_name FROM dwh_Dim_Instructor
 );
 
------------------------------------------------------6
 
+---- загрузка данных в bridge таблицу 
 INSERT INTO dwh_Bridge_Instructor_Course (instructor_id, course_id)
 SELECT di.instructor_id, dc.course_id
 FROM temp_instructors ti
@@ -75,8 +71,9 @@ WHERE NOT EXISTS (
     WHERE b.instructor_id = di.instructor_id AND b.course_id = dc.course_id
 );
 
--------------------------------------------------7
 
+
+---- загрузка данных в fact tables 
 INSERT INTO dwh_Fact_Rating (user_sk, course_id, rating)
 SELECT
     du.user_sk,
@@ -90,7 +87,7 @@ WHERE NOT EXISTS (
     WHERE fr.user_sk = du.user_sk AND fr.course_id = dc.course_id
 );
 
--------------------------------------------------8
+
 
 INSERT INTO dwh_Fact_Enrollment (user_sk, course_id, time_id, status)
 SELECT
@@ -107,7 +104,7 @@ WHERE NOT EXISTS (
     WHERE fe.user_sk = du.user_sk AND fe.course_id = dc.course_id AND fe.time_id = dt.time_id
 );
 
---------------------------------------------------------------------------------------------9
+
 
 INSERT INTO dwh_Fact_Payment (user_sk, course_id, time_id, total_amount)
 SELECT
@@ -123,42 +120,5 @@ WHERE NOT EXISTS (
     SELECT 1 FROM dwh_Fact_Payment fp
     WHERE fp.user_sk = du.user_sk AND fp.course_id = dc.course_id AND fp.time_id = dt.time_id
 );
-
-
-
-
-
-
-
--- Временное измерение
-SELECT * FROM dwh_Dim_Time ORDER BY time_id;
-
--- Категории
-SELECT * FROM dwh_Dim_Category ORDER BY category_id;
-
--- Курсы
-SELECT * FROM dwh_Dim_Course ORDER BY course_id;
-
--- Пользователи
-SELECT * FROM dwh_Dim_User ORDER BY user_sk;
-
--- Инструкторы
-SELECT * FROM dwh_Dim_Instructor ORDER BY instructor_id;
-
--- Связь инструктор-курс
-SELECT * FROM dwh_Bridge_Instructor_Course ORDER BY instructor_id, course_id;
-
-
-
-
--- Рейтинги
-SELECT * FROM dwh_Fact_Rating;
-
--- Записи на курсы (Enrollment)
-SELECT * FROM dwh_Fact_Enrollment ORDER BY user_sk, course_id, time_id;
-
--- Платежи
-SELECT * FROM dwh_Fact_Payment ORDER BY user_sk, course_id, time_id;
-
 
 

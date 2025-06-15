@@ -82,7 +82,7 @@ CREATE TABLE Instructors (
     instructor_name VARCHAR(100) UNIQUE
 );
 
-
+--- 9 таблица Course_Instructors
 DROP TABLE IF EXISTS Course_Instructors;
 CREATE TABLE Course_Instructors (
     course_id INTEGER REFERENCES Course(course_id) ON DELETE CASCADE,
